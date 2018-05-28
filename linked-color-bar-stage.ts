@@ -111,7 +111,7 @@ class LCBNode {
     addNeighbor() {
         if (this.i < LCB_NODES - 1) {
             this.next = new LCBNode(this.i + 1)
-            this.prev.next = this
+            this.next.prev = this
         }
     }
 
@@ -140,8 +140,8 @@ class LCBNode {
             this.prev.draw(context)
         }
         const gap : number = w /LCB_NODES
-        context.fillStyle = 'yellow'
-        context.fillRect(0, 0, gap, h)
+        context.fillStyle = '#FFEB3B'
+        context.fillRect(this.i * gap, 0, gap * this.state.scale, h)
     }
 }
 

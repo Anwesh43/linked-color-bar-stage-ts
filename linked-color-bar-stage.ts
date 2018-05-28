@@ -87,7 +87,7 @@ class LCBNode {
     prev : LCBNode
 
     constructor(private i : number) {
-
+        this.addNeighbor()
     }
 
     addNeighbor() {
@@ -105,7 +105,7 @@ class LCBNode {
         this.state.startUpdating(startcb)
     }
 
-    getNeighbor(dir : number, cb : Function) {
+    getNext(dir : number, cb : Function) {
         var curr : LCBNode = this.prev
         if (dir == 1) {
             curr = this.next
@@ -124,5 +124,29 @@ class LCBNode {
         const gap : number = w /LCB_NODES
         context.fillStyle = 'yellow'
         context.fillRect(0, 0, gap, h)
+    }
+}
+
+class LinkedColorBar {
+
+    dir : number = 1
+
+    curr : LCBNode = new LCBNode(0)
+
+    draw(context : CanvasRenderingContext2D) {
+        this.curr.draw(context)
+    }
+
+    update(stopcb : Function) {
+        this.curr.update(() => {
+            this.curr = this.curr.getNext(this.dir, () => {
+                this.dir *= -1
+            })
+            stopcb()
+        })
+    }
+
+    startUpdating(startcb : Function) {
+        this.curr.startUpdating(startcb)
     }
 }

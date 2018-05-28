@@ -6,6 +6,10 @@ class LinkedColorBarStage {
 
     context : CanvasRenderingContext2D
 
+    animator : Animator = new Animator()
+
+    linkedColorBar : LinkedColorBar = new LinkedColorBar()
+
     constructor() {
         this.initCanvas()
     }
@@ -20,11 +24,19 @@ class LinkedColorBarStage {
     render() {
         this.context.fillStyle = '#212121'
         this.context.fillRect(0, 0, w, h)
+        this.linkedColorBar.draw(this.context)
     }
 
     handleTap() {
         this.canvas.onmousedown = () => {
-
+            this.linkedColorBar.startUpdating(() => {
+                this.animator.start(() => {
+                    this.render()
+                    this.linkedColorBar.update(() => {
+                        this.animator.stop()
+                    })
+                })
+            })
         }
     }
 }

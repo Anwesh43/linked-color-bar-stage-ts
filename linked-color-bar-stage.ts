@@ -1,4 +1,4 @@
-const w : number = window.innerWidth, h = window.innerHeight
+const w : number = window.innerWidth, h : number = window.innerHeight, LCB_NODES = 5
 
 class LinkedColorBarStage {
 
@@ -75,5 +75,54 @@ class Animator {
           this.animated = false
           clearInterval(this.interval)
        }
+    }
+}
+
+class LCBNode {
+
+    state : State = new State()
+
+    next : LCBNode
+
+    prev : LCBNode
+
+    constructor(private i : number) {
+
+    }
+
+    addNeighbor() {
+        if (this.i < LCB_NODES - 1) {
+            this.next = new LCBNode(this.i + 1)
+            this.prev.next = this
+        }
+    }
+
+    update(stopcb : Function) {
+        this.state.update(stopcb)
+    }
+
+    startUpdating(startcb : Function) {
+        this.state.startUpdating(startcb)
+    }
+
+    getNeighbor(dir : number, cb : Function) {
+        var curr : LCBNode = this.prev
+        if (dir == 1) {
+            curr = this.next
+        }
+        if (curr) {
+            return curr
+        }
+        cb()
+        return this
+    }
+
+    draw(context : CanvasRenderingContext2D) {
+        if (this.prev) {
+            this.prev.draw(context)
+        }
+        const gap : number = w /LCB_NODES
+        context.fillStyle = 'yellow'
+        context.fillRect(0, 0, gap, h)
     }
 }

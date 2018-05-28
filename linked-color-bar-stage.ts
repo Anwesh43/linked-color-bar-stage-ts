@@ -39,6 +39,12 @@ class LinkedColorBarStage {
             })
         }
     }
+
+    static init() {
+        const stage : LinkedColorBarStage = new LinkedColorBarStage()
+        stage.render()
+        stage.handleTap()
+    }
 }
 
 class State {
